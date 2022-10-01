@@ -27,6 +27,13 @@ static int oh_beta(void *data, const argparse_option_t *opt, const char *arg) {
 	return 0;
 }
 
+static int oh_gamma(void *data, const argparse_option_t *opt, const char *arg) {
+	(void)data;
+	(void)opt;
+	(void)arg;
+	return 0;
+}
+
 static int oh_positional(void *data, const argparse_option_t *opt, const char *arg) {
 	(void)opt;
 	struct parse_result *res = data;
@@ -38,6 +45,8 @@ static int oh_positional(void *data, const argparse_option_t *opt, const char *a
 static const argparse_option_t options[] = {
 	{'a', "alpha", NULL, "option alpha", oh_alpha},
 	{'b', "beta", "arg", "option beta", oh_beta},
+	{'g', "gamma", "the____________________argument",
+		"an option takes argument called 'the____________________argument'", oh_gamma},
 	{0, NULL, "xxx", "positional argument", oh_positional},
 	{0, NULL, NULL, NULL, NULL},
 };

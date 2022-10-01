@@ -200,7 +200,7 @@ ARGPARSE_INLINE void argparse_help(const argparse_program_t *prog) ARGPARSE_NOEX
 	}
 
 	puts("Options:");
-	const size_t left_width = 25;
+	const size_t left_width = 30, right_width = 80 - left_width;
 	for (const argparse_option_t *opt = prog->opts; ; opt++) {
 		if (!opt->short_name && !opt->long_name) {
 			if (opt->argument)
@@ -246,7 +246,31 @@ ARGPARSE_INLINE void argparse_help(const argparse_program_t *prog) ARGPARSE_NOEX
 			}
 			for (size_t i = 0; i < pad_n; i++)
 				fputc(' ', stdout);
-			fputs(opt->help, stdout);
+
+			const char *s = opt->help;
+			while (1) {
+				if (strlen(s) <= right_width) {
+					fputs(s, stdout);
+					break;
+				}
+
+				const char *end = s + right_width;
+				while (1) {
+					if (*end == ' ')
+						break;
+					if (end == s) {
+						end = s + right_width;
+						break;
+					}
+					end--;
+				}
+
+				fwrite(s, 1, (size_t)(end - s), stdout);
+				s = *end == ' ' ? end + 1 : end;
+				fputc('\n', stdout);
+				for (size_t i = 0; i < left_width; i++)
+					fputc(' ', stdout);
+			}
 		}
 
 		fputc('\n', stdout);
