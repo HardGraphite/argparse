@@ -67,6 +67,7 @@ ARGPARSE_INLINE void argparse_help(const argparse_program_t *prog) ARGPARSE_NOEX
 #endif /* __cplusplus */
 
 #include <assert.h>
+#include <stdio.h>
 #include <string.h>
 
 #ifdef __cplusplus
@@ -188,6 +189,68 @@ return_err:
 	assert(ARGPARSE_GETERROR(status) == err_code);
 	assert(ARGPARSE_GETINDEX(status) == err_index);
 	return status;
+}
+
+ARGPARSE_INLINE void argparse_help(const argparse_program_t *prog) ARGPARSE_NOEXCEPT {
+	printf("Usage: %s %s\n", prog->name, prog->usage ? prog->usage : "...");
+	if (prog->help) {
+		fwrite("  ", 1, 2, stdout);
+		puts(prog->help);
+		fputc('\n', stdout);
+	}
+
+	puts("Options:");
+	const size_t left_width = 25;
+	for (const argparse_option_t *opt = prog->opts; ; opt++) {
+		if (!opt->short_name && !opt->long_name) {
+			if (opt->argument)
+				continue;
+			else
+				break;
+		}
+
+		size_t char_count = 0;
+		fwrite("  ", 1, 2, stdout);
+		char_count += 2;
+		if (opt->short_name) {
+			fputc('-', stdout);
+			fputc(opt->short_name, stdout);
+			char_count += 2;
+			if (opt->long_name) {
+				fwrite(", ", 1, 2, stdout);
+				char_count += 2;
+			}
+		}
+		if (opt->long_name) {
+			const size_t n = strlen(opt->long_name);
+			fwrite("--", 1, 2, stdout);
+			fwrite(opt->long_name, 1, n, stdout);
+			char_count += 2 + n;
+		}
+		if (opt->argument) {
+			const size_t n = strlen(opt->argument);
+			fputc(' ', stdout);
+			fwrite(opt->argument, 1, n, stdout);
+			char_count += 1 + n;
+		}
+		fputc(' ', stdout);
+		char_count += 1;
+
+		if (opt->help) {
+			size_t pad_n;
+			if (char_count <= left_width) {
+				pad_n = left_width - char_count;
+			} else {
+				fputc('\n', stdout);
+				pad_n = left_width;
+			}
+			for (size_t i = 0; i < pad_n; i++)
+				fputc(' ', stdout);
+			fputs(opt->help, stdout);
+		}
+
+		fputc('\n', stdout);
+	}
 }
 
 #ifdef __cplusplus

@@ -112,4 +112,14 @@ int main(void) {
 				&& ARGPARSE_GETINDEX(status) == 1))
 			return EXIT_FAILURE;
 	}
+
+	{
+		const argparse_program_t prog = {
+			.name = "test",
+			.usage = "[-a|--alpha] [-b|--beta] positional",
+			.help = "argparse test",
+			.opts = options,
+		};
+		argparse_help(&prog);
+	}
 }
