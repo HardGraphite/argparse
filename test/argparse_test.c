@@ -54,7 +54,7 @@ static const argparse_option_t options[] = {
 int main(void) {
 	{
 		const char *argv[] = {"", "-a", "-b", "hello"};
-		int argc = sizeof argv / sizeof argv[0] - 1;
+		int argc = sizeof argv / sizeof argv[0];
 		struct parse_result res = { false, NULL, NULL };
 		const int status = argparse_parse(options, argc, (char **)argv, &res);
 		if (!(status == 0 && res.alpha && res.beta && !strcmp(res.beta, "hello")))
@@ -62,7 +62,7 @@ int main(void) {
 	}
 	{
 		const char *argv[] = {"", "--alpha", "--beta", "hello"};
-		int argc = sizeof argv / sizeof argv[0] - 1;
+		int argc = sizeof argv / sizeof argv[0];
 		struct parse_result res = { false, NULL, NULL };
 		const int status = argparse_parse(options, argc, (char **)argv, &res);
 		if (!(status == 0 && res.alpha && res.beta && !strcmp(res.beta, "hello")))
@@ -70,7 +70,7 @@ int main(void) {
 	}
 	{
 		const char *argv[] = {"", "-bhello"};
-		int argc = sizeof argv / sizeof argv[0] - 1;
+		int argc = sizeof argv / sizeof argv[0];
 		struct parse_result res = { false, NULL, NULL };
 		const int status = argparse_parse(options, argc, (char **)argv, &res);
 		if (!(status == 0 && res.beta && !strcmp(res.beta, "hello")))
@@ -79,7 +79,7 @@ int main(void) {
 	{
 		char arg0[] = "", arg1[] = "--beta=hello";
 		char *argv[] = {arg0, arg1};
-		int argc = sizeof argv / sizeof argv[0] - 1;
+		int argc = sizeof argv / sizeof argv[0];
 		struct parse_result res = { false, NULL, NULL };
 		const int status = argparse_parse(options, argc, argv, &res);
 		if (!(status == 0 && res.beta && !strcmp(res.beta, "hello")))
@@ -87,7 +87,7 @@ int main(void) {
 	}
 	{
 		const char *argv[] = {"", "hello"};
-		int argc = sizeof argv / sizeof argv[0] - 1;
+		int argc = sizeof argv / sizeof argv[0];
 		struct parse_result res = { false, NULL, NULL };
 		const int status = argparse_parse(options, argc, (char **)argv, &res);
 		if (!(status == 0 && res.positional && !strcmp(res.positional, "hello")))
@@ -96,7 +96,7 @@ int main(void) {
 
 	{
 		const char *argv[] = {"", "-c"};
-		int argc = sizeof argv / sizeof argv[0] - 1;
+		int argc = sizeof argv / sizeof argv[0];
 		struct parse_result res = { false, NULL, NULL };
 		const int status = argparse_parse(options, argc, (char **)argv, &res);
 		if (!(ARGPARSE_GETERROR(status) == ARGPARSE_ERR_BADOPT
@@ -105,7 +105,7 @@ int main(void) {
 	}
 	{
 		const char *argv[] = {"", "-ahello"};
-		int argc = sizeof argv / sizeof argv[0] - 1;
+		int argc = sizeof argv / sizeof argv[0];
 		struct parse_result res = { false, NULL, NULL };
 		const int status = argparse_parse(options, argc, (char **)argv, &res);
 		if (!(ARGPARSE_GETERROR(status) == ARGPARSE_ERR_NOARG
@@ -114,7 +114,7 @@ int main(void) {
 	}
 	{
 		const char *argv[] = {"", "-b"};
-		int argc = sizeof argv / sizeof argv[0] - 1;
+		int argc = sizeof argv / sizeof argv[0];
 		struct parse_result res = { false, NULL, NULL };
 		const int status = argparse_parse(options, argc, (char **)argv, &res);
 		if (!(ARGPARSE_GETERROR(status) == ARGPARSE_ERR_NEEDARG

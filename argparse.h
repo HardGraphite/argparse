@@ -86,7 +86,7 @@ ARGPARSE_INLINE int argparse_parse(
 		goto return_err; \
 	} while (0)
 
-	for (int arg_index = 1; arg_index <= argc; arg_index++) {
+	for (int arg_index = 1; arg_index < argc; arg_index++) {
 		char *const arg_str = argv[arg_index];
 		const argparse_option_t *opt = NULL;
 
@@ -131,7 +131,7 @@ ARGPARSE_INLINE int argparse_parse(
 						RETURN_ERR(ARGPARSE_ERR_TERM, arg_index);
 				} else {
 					const char *const opt_arg = argv[arg_index + 1];
-					if (arg_index + 1 > argc || opt_arg[0] == '-')
+					if (arg_index + 1 >= argc || opt_arg[0] == '-')
 						RETURN_ERR(ARGPARSE_ERR_NEEDARG, arg_index);
 					if (opt->handler(data, opt, opt_arg))
 						RETURN_ERR(ARGPARSE_ERR_TERM, arg_index);
@@ -164,7 +164,7 @@ ARGPARSE_INLINE int argparse_parse(
 						RETURN_ERR(ARGPARSE_ERR_TERM, arg_index);
 				} else {
 					const char *const opt_arg = argv[arg_index + 1];
-					if (arg_index + 1 > argc || opt_arg[0] == '-')
+					if (arg_index + 1 >= argc || opt_arg[0] == '-')
 						RETURN_ERR(ARGPARSE_ERR_NEEDARG, arg_index);
 					if (opt->handler(data, opt, opt_arg))
 						RETURN_ERR(ARGPARSE_ERR_TERM, arg_index);
